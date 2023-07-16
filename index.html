@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Générateur de liste de courses</title>
+
+        <link rel="stylesheet" type="text/css" href="style.css">
+    </head>
+
+
+    <body>
+
+        <select id="category" class="liste">
+            <option value="0">Catégorie</option>
+            <option value="fruits">Fruits</option>
+            <option value="vegetable">Légumes</option>
+            <option value="salt">Épicerie salée</option>
+            <option value="sugar">Épicerie sucrée</option>
+            <option value="milk">Crèmerie</option>
+        </select>
+
+        <select id="products" class="list">   
+        </select>
+
+        <label for="number">Nombre:</label>
+            <input type="number" id="number" name="number" >
+
+        <select id="quantity" class="liste">
+            <option value="0">Unité</option>
+            <option value="u">Pièce(s)</option>
+            <option value="g">Gramme(s)</option>
+            <option value="kg">Kilo(s)</option>
+            <option value="l">Litre(s)</option>
+            <option value="ml">Millilitres(s)</option>
+        </select>
+
+        <button id="add">Ajouter</button>
+
+        
+
+    <script src="script.js"></script>
+    </body>
+
+</html>
