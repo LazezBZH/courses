@@ -11,24 +11,19 @@
 
 
     <body>
-
-        <select id="category" class="liste">
-            <option value="0">Catégorie</option>
-            <option value="fruits">Fruits</option>
-            <option value="vegetable">Légumes</option>
-            <option value="salt">Épicerie salée</option>
-            <option value="sugar">Épicerie sucrée</option>
-            <option value="milk">Crèmerie</option>
+        <label for="category">Choisissez une catégorie</label>
+        <select id="category" class="liste">       
         </select>
 
-        <select id="products" class="list">   
+        <label for="products" id="productsLabel">Choisissez un produit</label>
+        <select id="products" class="list" required >       
         </select>
 
-        <label for="number">Nombre:</label>
-            <input type="number" id="number" name="number" >
+        <label for="quantity">Combien?</label>
+            <input type="number" id="quantity" name="number" placeholder="Facultatif">
 
-        <select id="quantity" class="liste">
-            <option value="0">Unité</option>
+        <select id="unity" class="liste">
+            <option value="">Unité:</option>
             <option value="u">Pièce(s)</option>
             <option value="g">Gramme(s)</option>
             <option value="kg">Kilo(s)</option>
@@ -36,9 +31,21 @@
             <option value="ml">Millilitres(s)</option>
         </select>
 
-        <button id="add">Ajouter</button>
+        <button disabled id="add">Ajouter</button>
+        <ul id="result">
+           
+        </ul>
 
         
+
+        <input type="text"  placeholder="Entrez une categorie" id="catToAdd">
+    <button type="button"  id="getCat">Récupérer la cat</button>
+
+     <input type="text"  placeholder="Entrez un produit" id="catToAdd">
+     <select id="categoryForAdd" class="liste">
+          
+        </select>
+    <button type="button"  id="getProd">Récupérer le prod</button>
 
     <script src="script.js"></script>
     </body>
