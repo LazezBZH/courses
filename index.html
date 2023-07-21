@@ -7,35 +7,33 @@
         <title>Générateur de liste de courses</title>
 
         <link rel="stylesheet" type="text/css" href="style.css">
+
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.2/jspdf.debug.js"></script>
     </head>
 
 
-    <body>
+    <body id="body">
         <label for="category">Choisissez une catégorie</label>
-        <select id="category" class="liste">       
+        <select  id="category" class="liste">    
+            <option value="">Catégorie</option>   
         </select>
 
         <label for="products" id="productsLabel">Choisissez un produit</label>
-        <select id="products" class="list" required >       
+        <select id="products" class="list" required disabled>  
+            <option value="">Produits:</option>     
         </select>
 
-        <label for="quantity">Combien?</label>
-            <input type="number" id="quantity" name="number" placeholder="Facultatif">
-
-        <select id="unity" class="liste">
-            <option value="">Unité:</option>
-            <option value="u">Pièce(s)</option>
-            <option value="g">Gramme(s)</option>
-            <option value="kg">Kilo(s)</option>
-            <option value="l">Litre(s)</option>
-            <option value="ml">Millilitres(s)</option>
-        </select>
+        <label for="details">Précisions:</label>
+            <input id="details" type="texarea" placeholder="Poids, volume, nombre...">
 
         <button disabled id="add">Ajouter</button>
-        <ul id="result">
+        <ul  id="result">
            
         </ul>
-
+ <div class="col-sm-6 text-right">
+      <a id="exportPdf" class="export-btn">Enregistrer cette liste en pdf</a>
+    </div>
         
 
         <input type="text"  placeholder="Entrez une categorie" id="catToAdd">
@@ -48,6 +46,7 @@
     <button type="button"  id="getProd">Récupérer le prod</button>
 
     <script src="script.js"></script>
+    <script  src="pdf.js"></script>
     </body>
 
 </html>

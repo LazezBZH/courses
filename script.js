@@ -3,8 +3,8 @@ const categoryForAdd = document.getElementById("categoryForAdd");
 
 const products = document.getElementById("products");
 const productsLabel = document.getElementById("productsLabel");
-const quantity = document.getElementById("quantity");
-const unity = document.getElementById("unity");
+const details = document.getElementById("details");
+
 const add = document.getElementById("add");
 const resultUl = document.getElementById("result");
 const resultList = document.getElementById("list");
@@ -14,17 +14,16 @@ const catToAdd = document.getElementById("catToAdd");
 
 let categoryName = "";
 let productName = "";
+let detailsTxt = "";
 let monId = "";
-let quantityName = "";
-let unityName = "";
 
 let list = [];
 let listSet = [];
 
 category.addEventListener("click", getCategory);
 products.addEventListener("click", getProduct);
-quantity.addEventListener("change", getQuantity);
-unity.addEventListener("click", getUnity);
+details.addEventListener("change", getDetails);
+
 add.addEventListener("click", addProduct);
 getCat.addEventListener("click", getTheCat);
 
@@ -39,8 +38,12 @@ if (!localStorage.getItem("categories")) {
       return response.json();
     })
     .then(function (data) {
+      data = data.sort(function (a, b) {
+        return a.name.localeCompare(b.name);
+      });
       dataCat = JSON.stringify(data);
 
+      console.log(dataCat);
       localStorage.setItem("categories", dataCat);
 
       data.forEach(function (element) {
@@ -51,6 +54,10 @@ if (!localStorage.getItem("categories")) {
     });
 } else {
   dataCat = JSON.parse(localStorage.getItem("categories"));
+  dataCat = dataCat.sort(function (a, b) {
+    return a.name.localeCompare(b.name);
+  });
+  console.log(dataCat);
   dataCat.forEach(function (element) {
     (category.innerHTML += `<option value=${element.value} >${element.name}</option>`),
       (categoryForAdd.innerHTML += `<option value=${element.value} >${element.name}</option>`),
@@ -62,10 +69,8 @@ if (!localStorage.getItem("categories")) {
 function getCategory(e) {
   categoryName = e.target.value;
 
-  if (!categoryName) {
-    products.style.opacity = "0";
-    productsLabel.style.opacity = "0";
-  } else {
+  if (categoryName) {
+    products.disabled = false;
     products.style.opacity = "1";
     productsLabel.style.opacity = "1";
     setProducts(categoryName);
@@ -139,7 +144,7 @@ function addProduct() {
   add.disabled = true;
   if (productName) {
     let resultProd = "";
-    list.push({ productName, thisid });
+    list.push({ productName, thisid, detailsTxt });
     list.sort();
     let listSet = list.filter((item, index, self) => {
       return (
@@ -163,23 +168,17 @@ function addProduct() {
     listSet.forEach(
       (product) => (
         console.log(thisid, resultProd, product),
-        (resultProd.innerHTML += `<li> ${product.productName} </li>`)
+        (resultProd.innerHTML += `<li> ${product.productName} : ${product.detailsTxt} </li>`)
       )
     );
   }
   sortUl();
 }
 
-// obtenir la quantité
-function getQuantity(e) {
-  quantityName = e.target.value;
-  console.log(quantityName);
-}
-// obtenir l'unité'
-function getUnity(e) {
-  unityName = e.target.value;
-  console.log(unityName);
-  //   return productName;
+// obtenir les détails
+function getDetails(e) {
+  detailsTxt = e.target.value;
+  console.log(detailsTxt);
 }
 
 // ordre alpha
