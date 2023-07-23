@@ -1,22 +1,22 @@
 [
   {
-    "name": "Fruits",
+    "name": "fruits",
     "value": "fruits"
   },
   {
-    "name": "Légumes",
-    "value": "vegetable"
+    "name": "légumes",
+    "value": "légumes"
   },
   {
     "name": "Épicerie salée",
-    "value": "salt"
+    "value": "Épicerie salée"
   },
   {
     "name": "Épicerie sucrée",
-    "value": "sugar"
+    "value": "Épicerie sucrée"
   },
   {
     "name": "Crèmerie",
-    "value": "milk"
+    "value": "Crèmerie"
   }
 ]

@@ -66,12 +66,13 @@ function setCategories() {
         console.log(dataCat);
         localStorage.setItem("categories", dataCat);
 
-        data.forEach(function (element) {
-          (category.innerHTML += `<option value=${element.value} >${element.name}</option>`),
-            (categoryForAdd.innerHTML += `<option value=${element.value} >${element.name}</option>`),
-            (resultUl.innerHTML += `<li  >${element.name}<ul  class="toSort" id= ${element.value}></ul></li>`);
-        });
-        window.location.reload();
+        // data.forEach(function (element) {
+        //   (category.innerHTML += `<option value=${element.value} >${element.name}</option>`),
+        //     (categoryForAdd.innerHTML += `<option value=${element.value} >${element.name}</option>`),
+        //     (resultUl.innerHTML += `<li >${element.name}<ul  class="toSort" id= ${element.value}></ul></li>`);
+        // });
+        // window.location.reload();
+        setCategories();
       });
   } else {
     dataCat = JSON.parse(localStorage.getItem("categories"));
@@ -80,15 +81,29 @@ function setCategories() {
     });
     console.log(dataCat);
     dataCat.forEach(function (element) {
-      (category.innerHTML += `<option value=${element.value} >${element.name}</option>`),
-        (categoryForAdd.innerHTML += `<option value=${element.value} >${element.name}</option>`),
-        (resultUl.innerHTML += `<li>${element.name}<ul class="toSort" id= ${element.value}></ul></li>`);
+      (category.innerHTML += `<option value=${element.value.replace(
+        /[^a-zA-Z0-9éèêêàïôù]/g,
+        "*"
+      )} >${element.name}</option>`),
+        (categoryForAdd.innerHTML += `<option value=${element.value.replace(
+          /[^a-zA-Z0-9éèêêàïôù]/g,
+          "*"
+        )} >${element.name}</option>`),
+        (resultUl.innerHTML += `<li>${
+          element.name
+        } <button class="sup-cat" data-id=${element.value.replace(
+          /[^a-zA-Z0-9éèêêàïôù]/g,
+          "*"
+        )}>Sup catég</button><ul class="toSort" id= ${element.value.replace(
+          /[^a-zA-Z0-9éèêêàïôù]/g,
+          "*"
+        )}></ul></li>`);
     });
   }
 }
 setCategories();
 
-// catégories
+// afficher catégories dans select et liste
 function getCategory(e) {
   categoryName = e.target.value;
   console.log(categoryName);
@@ -108,7 +123,7 @@ function getCategory(e) {
   // return categoryName;
 }
 
-// produits
+// afficher produits dans select
 
 function setProducts() {
   products.innerHTML = `<option value="0" >Choisissez</option>`;
@@ -131,24 +146,38 @@ function setProducts() {
         });
         prod.forEach(
           (element) =>
-            (products.innerHTML += `<option class=${element.id} value=${element.value} >${element.name}</option>`)
+            (products.innerHTML += `<option class=${element.id.replace(
+              /[^a-zA-Z0-9éèêêàïôù]/g,
+              "*"
+            )} value=${element.value.replace(/[^a-zA-Z0-9éèêêàïôù]/g, "*")} >${
+              element.name
+            }</option>`)
         );
       });
   }
   dataProd = JSON.parse(localStorage.getItem("products"));
 
-  let prod = dataProd.filter((dat) => dat.id == categoryName);
+  let prod = dataProd.filter(
+    (dat) =>
+      dat.id.replace(/[^a-zA-Z0-9éèêêàïôù]/g, "*") ==
+      categoryName.replace(/[^a-zA-Z0-9éèêêàïôù]/g, "*")
+  );
   prod = prod.sort(function (a, b) {
     return a.name.localeCompare(b.name);
   });
   prod.forEach(
     (element) =>
-      (products.innerHTML += `<option class=${element.id} value=${element.value} >${element.name}</option>`)
+      (products.innerHTML += `<option class=${element.id.replace(
+        /[^a-zA-Z0-9éèêêàïôù]/g,
+        "*"
+      )} value=${element.value.replace(/[^a-zA-Z0-9éèêêàïôù]/g, "*")} >${
+        element.name
+      }</option>`)
   );
 }
 setProducts();
 
-// ajout cat au select
+// ajout d'une cat au select
 
 function getTheCat() {
   let val = catToAdd.value;
@@ -165,7 +194,7 @@ function getTheCat() {
     window.location.reload();
   }
 }
-// ajout produit au select
+// ajout d'un produit au select
 function getTheCatForAdd() {
   addIn = categoryForAdd.value;
   console.log("addin", addIn);
@@ -233,14 +262,22 @@ function addProduct() {
 
     listSetFilter = listSet.filter((listItem) => listItem.thisid === thisid);
 
-    resultProd = document.getElementById(thisid);
+    resultProd = document.getElementById(
+      thisid.replace(/[^a-zA-Z0-9éèêêàïôù]/g, "*")
+    );
     resultProd.innerHTML = "";
     listSetFilter.forEach(
       (product) => (
         console.log(thisid, resultProd, product),
         product.detailsTxt
-          ? (resultProd.innerHTML += `<li> ${product.productName} : ${product.detailsTxt} </li>`)
-          : (resultProd.innerHTML += `<li> ${product.productName} `)
+          ? (resultProd.innerHTML += `<li> ${product.productName.replaceAll(
+              "*",
+              " "
+            )} : ${product.detailsTxt} </li>`)
+          : (resultProd.innerHTML += `<li> ${product.productName.replaceAll(
+              "*",
+              " "
+            )} `)
       )
     );
   }
@@ -292,8 +329,14 @@ function setTheList() {
       (resultProd.innerHTML = ""),
       listSetFilter.forEach((product) =>
         product.detailsTxt
-          ? (resultProd.innerHTML += `<li> ${product.productName} : ${product.detailsTxt} </li>`)
-          : (resultProd.innerHTML += `<li> ${product.productName} `)
+          ? (resultProd.innerHTML += `<li> ${product.productName.replaceAll(
+              "*",
+              " "
+            )} : ${product.detailsTxt} </li>`)
+          : (resultProd.innerHTML += `<li> ${product.productName.replaceAll(
+              "*",
+              " "
+            )} `)
       )
     )
   );
