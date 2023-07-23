@@ -1,0 +1,42 @@
+[
+  {
+    "product": "fruits",
+    "items": [
+      { "id": "fruits", "name": "Pomme", "value": "pomme" },
+      { "id": "fruits", "name": "Banane", "value": "banane" },
+      { "id": "fruits", "name": "Poire", "value": "poire" }
+    ]
+  },
+  {
+    "product": "vegetable",
+    "items": [
+      { "id": "vegetable", "name": "Poireaux", "value": "poireaux" },
+      { "id": "vegetable", "name": "Chou", "value": "chou" },
+      { "id": "vegetable", "name": "Carottes", "value": "carottes" }
+    ]
+  },
+  {
+    "product": "salt",
+    "items": [
+      { "id": "salt", "name": "Chips", "value": "chips" },
+      { "id": "salt", "name": "Sel", "value": "sel" },
+      { "id": "salt", "name": "Poivre", "value": "poivre" }
+    ]
+  },
+  {
+    "product": "sugar",
+    "items": [
+      { "id": "sugar", "name": "Coockies", "value": "coockies" },
+      { "id": "sugar", "name": "Sucre", "value": "sucre" },
+      { "id": "sugar", "name": "Confiture", "value": "confiture" }
+    ]
+  },
+  {
+    "product": "milk",
+    "items": [
+      { "id": "milk", "name": "Beurre", "value": "beurre" },
+      { "id": "milk", "name": "Oeufs", "value": "oeufs" },
+      { "id": "milk", "name": "Crème", "value": "crème" }
+    ]
+  }
+]

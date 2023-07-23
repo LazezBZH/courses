@@ -1,3 +1,11 @@
 /* #products {
   opacity: 0;
 } */
+#productsLabel,
+#detailsLabel {
+  opacity: 0.5;
+}
+
+/* main {
+  display: none;
+} */

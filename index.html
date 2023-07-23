@@ -14,9 +14,14 @@
 
 
     <body id="body">
-        <label for="category">Choisissez une catégorie</label>
+        <aside>
+       
+        <button id="clear">Clear</button>
+        </aside>
+        <main>
+            <label for="category">Choisissez une catégorie</label>
         <select  id="category" class="liste">    
-            <option value="">Catégorie</option>   
+            <option value="category">Catégorie</option>   
         </select>
 
         <label for="products" id="productsLabel">Choisissez un produit</label>
@@ -24,8 +29,8 @@
             <option value="">Produits:</option>     
         </select>
 
-        <label for="details">Précisions:</label>
-            <input id="details" type="texarea" placeholder="Poids, volume, nombre...">
+        <label for="details" id="detailsLabel">Précisions:</label>
+            <input id="details" disabled type="texarea" placeholder="Poids, volume, nombre...">
 
         <button disabled id="add">Ajouter</button>
         <ul  id="result">
@@ -34,16 +39,29 @@
  <div class="col-sm-6 text-right">
       <a id="exportPdf" class="export-btn">Enregistrer cette liste en pdf</a>
     </div>
-        
+
+    <dialog id="favDialog">
+  <form id="form-dialog" method="dialog">
+    <p><label>Nom :
+      <input type="text" id="inputStore" placeholder="donnez un nom à votre liste"></p>
+    <menu>
+      <button value="cancel">Annuler</button>
+      <button id="confirmBtn" value="default">Confirmer</button>
+    </menu>
+  </form>
+</dialog>
+        <button id="store">Enregistrer cette liste localstorage</button>
 
         <input type="text"  placeholder="Entrez une categorie" id="catToAdd">
     <button type="button"  id="getCat">Récupérer la cat</button>
 
-     <input type="text"  placeholder="Entrez un produit" id="catToAdd">
+     <input type="text"  placeholder="Entrez un produit" id="prodToAdd">
      <select id="categoryForAdd" class="liste">
+        <option value="">Cat où Ajouter</option>
           
         </select>
     <button type="button"  id="getProd">Récupérer le prod</button>
+        </main>
 
     <script src="script.js"></script>
     <script  src="pdf.js"></script>
