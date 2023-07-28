@@ -23,33 +23,15 @@ let detailsTxt = "";
 let monId = "";
 let addIn = "";
 
-let dataCat;
-let dataProd;
-let allSavedList;
-
-let list = JSON.parse(localStorage.getItem("last list")) || [];
+let list;
 let listSet = [];
 
 const clear = document.getElementById("clear");
-const clearAll = document.getElementById("clear-all");
-const savedList = document.getElementById("saved-list");
-const useLast = document.getElementById("use-last");
-const createNew = document.getElementById("create-new");
 
 clear.addEventListener("click", clearList);
-clearAll.addEventListener("click", clearAllList);
-savedList.addEventListener("change", getList);
-useLast.addEventListener("click", useLastList);
-createNew.addEventListener("click", createNewList);
 
 function clearList() {
   localStorage.removeItem("last list");
-  window.location.reload();
-}
-function clearAllList() {
-  localStorage.removeItem("last list");
-  localStorage.removeItem("categories");
-  localStorage.removeItem("products");
   window.location.reload();
 }
 
@@ -67,44 +49,57 @@ getProd.addEventListener("click", getTheProd);
 window.addEventListener("load", setTheList);
 
 // CATEGORIES
-if (!localStorage.getItem("categories")) {
-  dataCat = [];
-  localStorage.setItem("categories", dataCat);
-}
-if (!localStorage.getItem("products")) {
-  dataProd = [];
-  localStorage.setItem("products", dataProd);
-}
-if (!localStorage.getItem("saved")) {
-  allSavedList = [];
-  localStorage.setItem("saved", allSavedList);
-}
-// dataCat = JSON.parse(localStorage.getItem("categories")) ;
-// dataProd = JSON.parse(localStorage.getItem("products")) ;
+let dataCat = JSON.parse(localStorage.getItem("categories")) || [];
+let dataProd = JSON.parse(localStorage.getItem("products")) || [];
 function setCategories() {
-  dataCat = JSON.parse(localStorage.getItem("categories"));
-  console.log();
-  dataCat = dataCat.sort(function (a, b) {
-    return a.name.localeCompare(b.name);
-  });
-  console.log(dataCat);
-  dataCat.forEach(function (element) {
-    (category.innerHTML += `<option value=${element.value.replace(
-      /[^a-zA-Z0-9éèêêàïôù]/g,
-      "*"
-    )} >${element.name}</option>`),
-      (categoryForAdd.innerHTML += `<option value=${element.value.replace(
+  if (!localStorage.getItem("categories")) {
+    fetch("/data/categories.json")
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        data = data.sort(function (a, b) {
+          return a.name.localeCompare(b.name);
+        });
+        dataCat = JSON.stringify(data);
+
+        console.log(dataCat);
+        localStorage.setItem("categories", dataCat);
+
+        // data.forEach(function (element) {
+        //   (category.innerHTML += `<option value=${element.value} >${element.name}</option>`),
+        //     (categoryForAdd.innerHTML += `<option value=${element.value} >${element.name}</option>`),
+        //     (resultUl.innerHTML += `<li >${element.name}<ul  class="toSort" id= ${element.value}></ul></li>`);
+        // });
+        // window.location.reload();
+        setCategories();
+      });
+  } else {
+    dataCat = JSON.parse(localStorage.getItem("categories"));
+    dataCat = dataCat.sort(function (a, b) {
+      return a.name.localeCompare(b.name);
+    });
+    console.log(dataCat);
+    dataCat.forEach(function (element) {
+      (category.innerHTML += `<option value=${element.value.replace(
         /[^a-zA-Z0-9éèêêàïôù]/g,
         "*"
       )} >${element.name}</option>`),
-      (resultUl.innerHTML += `<li>${element.name} 
-      
-      <ul class="toSort" id= ${element.value.replace(
-        /[^a-zA-Z0-9éèêêàïôù]/g,
-        "*"
-      )}>
-      </ul></li>`);
-  });
+        (categoryForAdd.innerHTML += `<option value=${element.value.replace(
+          /[^a-zA-Z0-9éèêêàïôù]/g,
+          "*"
+        )} >${element.name}</option>`),
+        (resultUl.innerHTML += `<li>${
+          element.name
+        } <button class="sup-cat" data-id=${element.value.replace(
+          /[^a-zA-Z0-9éèêêàïôù]/g,
+          "*"
+        )}>Sup catég</button><ul class="toSort" id= ${element.value.replace(
+          /[^a-zA-Z0-9éèêêàïôù]/g,
+          "*"
+        )}></ul></li>`);
+    });
+  }
 }
 setCategories();
 
@@ -131,9 +126,35 @@ function getCategory(e) {
 // afficher produits dans select
 
 function setProducts() {
-  // if (localStorage.getItem("products")) {
   products.innerHTML = `<option value="0" >Choisissez</option>`;
+  if (!localStorage.getItem("products")) {
+    fetch("/data/products.json")
+      .then(function (response) {
+        return response.json();
+      })
+      .then(function (data) {
+        data = data.sort(function (a, b) {
+          return a.name.localeCompare(b.name);
+        });
+        dataProd = JSON.stringify(data);
 
+        localStorage.setItem("products", dataProd);
+
+        let prod = data.filter((dat) => dat.id == categoryName);
+        prod = prod.sort(function (a, b) {
+          return a.name.localeCompare(b.name);
+        });
+        prod.forEach(
+          (element) =>
+            (products.innerHTML += `<option class=${element.id.replace(
+              /[^a-zA-Z0-9éèêêàïôù]/g,
+              "*"
+            )} value=${element.value.replace(/[^a-zA-Z0-9éèêêàïôù]/g, "*")} >${
+              element.name
+            }</option>`)
+        );
+      });
+  }
   dataProd = JSON.parse(localStorage.getItem("products"));
 
   let prod = dataProd.filter(
@@ -165,13 +186,11 @@ function getTheCat() {
     name: val,
     value: val,
   };
-  console.log(toAdd);
   if (val.length >= 1) {
     dataCat.push(toAdd);
 
     dataCat = JSON.stringify(dataCat);
     localStorage.setItem("categories", dataCat);
-    setCategories();
     window.location.reload();
   }
 }
@@ -202,7 +221,7 @@ function getTheProd() {
 // obtenir le produit
 function getProduct(e) {
   add.disabled = false;
-  productName = e.target.options[e.target.selectedIndex].text;
+  productName = e.target.value;
   let selectElement = e.target;
   let optionSelectionnee = selectElement.selectedOptions[0];
   let monId = optionSelectionnee.className;
@@ -213,7 +232,7 @@ function getProduct(e) {
 // Ajout produit aux listes
 function addProduct() {
   add.disabled = true;
-  // list = JSON.parse(localStorage.getItem("last list")) || [];
+  list = JSON.parse(localStorage.getItem("last list")) || [];
 
   console.log(list);
   if (productName) {
@@ -275,7 +294,7 @@ function addProduct() {
   localStorage.setItem("last list", dataList);
 }
 function setTheList() {
-  list = JSON.parse(localStorage.getItem("last list")) || [];
+  list = JSON.parse(localStorage.getItem("last list"));
 
   console.log(list);
 
@@ -297,13 +316,11 @@ function setTheList() {
   listSet = listSet.sort();
   console.log("arrayunique", listSet);
 
-  let resultProds = resultUl.querySelectorAll("li");
-  let resultProdUl;
+  resultProds = resultUl.querySelectorAll("li");
   resultProds.forEach(
     (resultP) => (
       (resultProdUl = resultP.querySelector("ul")),
-      // console.log(resultProdUl),
-
+      console.log(resultProdUl),
       (thisid = resultProdUl.getAttribute("id")),
       (listSetFilter = listSet.filter(
         (listItem) => listItem.thisid === thisid
@@ -312,8 +329,14 @@ function setTheList() {
       (resultProd.innerHTML = ""),
       listSetFilter.forEach((product) =>
         product.detailsTxt
-          ? (resultProd.innerHTML += `<li> ${product.productName} : ${product.detailsTxt} </li>`)
-          : (resultProd.innerHTML += `<li> ${product.productName} `)
+          ? (resultProd.innerHTML += `<li> ${product.productName.replaceAll(
+              "*",
+              " "
+            )} : ${product.detailsTxt} </li>`)
+          : (resultProd.innerHTML += `<li> ${product.productName.replaceAll(
+              "*",
+              " "
+            )} `)
       )
     )
   );
@@ -377,71 +400,6 @@ confirmBtn.addEventListener("click", function onClose() {
   listName = input.value;
   console.log(listName);
   dataList = localStorage.getItem("last list");
-  dataCat = localStorage.getItem("categories");
-  dataProd = localStorage.getItem("products");
   localStorage.setItem(listName, dataList);
-  localStorage.setItem(listName + "cat", dataCat);
-  localStorage.setItem(listName + "prod", dataProd);
-
-  getTheListName();
-  saveLists();
-
   alert(listName + " enregistrée dans le localstorage");
 });
-
-// Listes sauvegardées
-
-saveLists();
-function getTheListName() {
-  // allSavedList = JSON.parse(localStorage.getItem("saved"));
-  console.log("399", allSavedList);
-  let val = input.value;
-  let toAdd = {
-    name: val,
-  };
-  console.log(toAdd);
-  if (val.length >= 1) {
-    allSavedList.push(toAdd);
-
-    allSavedList = JSON.stringify(allSavedList);
-    localStorage.setItem("saved", allSavedList);
-  }
-}
-function saveLists() {
-  allSavedList = JSON.parse(localStorage.getItem("saved"));
-  console.log("403", allSavedList);
-  // allSavedList = [...allSavedList];
-  savedList.innerHTML = `<option value="">Listes sauvegardées</option>`;
-  allSavedList.forEach(
-    (el) =>
-      (savedList.innerHTML += `<option value=${el.name}>${el.name} </option> `)
-  );
-}
-function getList(e) {
-  console.log("choix", e.target.value);
-  let listToGet = e.target.value;
-  dataList = localStorage.getItem(listToGet);
-  dataCat = localStorage.getItem(listToGet + "cat");
-  dataProd = localStorage.getItem(listToGet + "prod");
-  localStorage.setItem("last list", dataList);
-  localStorage.setItem("categories", dataCat);
-  localStorage.setItem("products", dataProd);
-  window.location.reload();
-}
-
-function useLastList() {
-  console.log("coucu");
-}
-function createNewList() {
-  // dataCat = [];
-  // dataProd = [];
-  // dataList = [];
-  // localStorage.setItem("last list", dataList);
-  // localStorage.setItem("categories", dataCat);
-  // localStorage.setItem("products", dataProd);
-  // localStorage.removeItem("last list");
-  // localStorage.removeItem("categories");
-  // localStorage.removeItem("products");
-
-  window.location.reload();
-}

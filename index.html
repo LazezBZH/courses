@@ -16,9 +16,16 @@
     <body id="body">
         <aside>
        
-        <button id="clear">Clear</button>
+        <button id="clear-all">Clear all</button>
+        <button id="clear">Clear </button>
         </aside>
         <main>
+          <label for="saved-list">Récupérer une liste sauvegardée (attention la dernière liste créée sera effacée si vous ne l'avez pas sauvegardée)</label>
+          <select  id="saved-list" class="saved-list">    
+            <option value="">Listes sauvegardées</option>   
+          </select>
+          <button id="use-last">Utiliser dernière liste</button>
+          <button id="create-new">créer une nouvelle liste</button>
             <label for="category">Choisissez une catégorie</label>
         <select  id="category" class="liste">    
             <option value="category">Catégorie</option>   
